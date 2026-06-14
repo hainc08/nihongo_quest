@@ -1,0 +1,1054 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nihongo Quest — Học tiếng Nhật mỗi ngày</title>
+  <meta name="description" content="Ứng dụng học tiếng Nhật gamification cho người Việt. Học Hiragana, Katakana, từ vựng và ngữ pháp N5.">
+  
+  <!-- CSS -->
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/screens.css">
+</head>
+<body>
+
+<div id="app">
+
+  <!-- ═══════════════════════════════════════════
+       SCREEN 1: SPLASH
+       ═══════════════════════════════════════════ -->
+  <section id="splash" class="screen splash active">
+    <div class="splash__logo">🐱</div>
+    <h1 class="splash__title">Nihongo Quest</h1>
+    <p class="splash__subtitle">Học tiếng Nhật mỗi ngày như một cuộc phiêu lưu</p>
+    <div class="splash__loader">
+      <div class="splash__dot"></div>
+      <div class="splash__dot"></div>
+      <div class="splash__dot"></div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════
+       SCREEN 2: ONBOARDING
+       ═══════════════════════════════════════════ -->
+  <section id="onboarding" class="screen onboarding">
+    <div class="onboarding__skip">
+      <button class="onboarding__skip-btn" id="onboarding-skip" onclick="Screens.skipOnboarding()">Bỏ qua</button>
+    </div>
+
+    <div class="onboarding__slides">
+      <div class="onboarding__illustration">
+        <span id="onboarding-illustration">🇯🇵</span>
+        <span class="onboarding__illustration-badge" id="onboarding-badge">📚</span>
+      </div>
+      <h2 class="onboarding__title" id="onboarding-title">Học tiếng Nhật từng bước</h2>
+      <p class="onboarding__description" id="onboarding-desc">Bắt đầu từ Hiragana, Katakana đến từ vựng và ngữ pháp N5.</p>
+    </div>
+
+    <div class="onboarding__footer">
+      <div class="dot-indicators" id="onboarding-dots">
+        <div class="dot dot--active"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+      </div>
+      <button class="btn btn-primary" id="onboarding-next" onclick="Screens.nextOnboarding()">Tiếp tục</button>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════
+       SCREEN 3: GOAL SELECTION
+       ═══════════════════════════════════════════ -->
+  <section id="goal-selection" class="screen goal-selection">
+    <h2 class="goal-selection__title">Bạn học tiếng Nhật<br>để làm gì?</h2>
+
+    <div class="goal-cards">
+      <div class="goal-card selected" data-goal="zero" onclick="Screens.selectGoal('zero')">
+        <div class="goal-card__icon">🌱</div>
+        <div class="goal-card__text">
+          <div class="goal-card__title">Bắt đầu từ số 0</div>
+          <div class="goal-card__subtitle">Tôi chưa biết tiếng Nhật</div>
+        </div>
+        <div class="goal-card__check">✓</div>
+      </div>
+      <div class="goal-card" data-goal="jlpt" onclick="Screens.selectGoal('jlpt')">
+        <div class="goal-card__icon">🎯</div>
+        <div class="goal-card__text">
+          <div class="goal-card__title">Học để thi JLPT N5</div>
+          <div class="goal-card__subtitle">Tôi muốn học có lộ trình rõ</div>
+        </div>
+        <div class="goal-card__check"></div>
+      </div>
+      <div class="goal-card" data-goal="speak" onclick="Screens.selectGoal('speak')">
+        <div class="goal-card__icon">💬</div>
+        <div class="goal-card__text">
+          <div class="goal-card__title">Học giao tiếp cơ bản</div>
+          <div class="goal-card__subtitle">Tôi muốn nghe nói trong đời sống</div>
+        </div>
+        <div class="goal-card__check"></div>
+      </div>
+      <div class="goal-card" data-goal="work" onclick="Screens.selectGoal('work')">
+        <div class="goal-card__icon">💼</div>
+        <div class="goal-card__text">
+          <div class="goal-card__title">Học cho công việc</div>
+          <div class="goal-card__subtitle">Tôi cần tiếng Nhật công sở</div>
+        </div>
+        <div class="goal-card__check"></div>
+      </div>
+    </div>
+
+    <h3 class="goal-section-title">Bạn muốn học bao lâu mỗi ngày?</h3>
+    <div class="time-options">
+      <button class="time-option" data-time="5" onclick="Screens.selectTime(5)">5 phút</button>
+      <button class="time-option selected" data-time="10" onclick="Screens.selectTime(10)">10 phút</button>
+      <button class="time-option" data-time="15" onclick="Screens.selectTime(15)">15 phút</button>
+      <button class="time-option" data-time="30" onclick="Screens.selectTime(30)">30 phút</button>
+    </div>
+
+    <button class="btn btn-primary" onclick="App.navigateTo('login')">🗺️ Tạo lộ trình cho tôi</button>
+  </section>
+
+  <!-- ═══════════════════════════════════════════
+       SCREEN 4: LOGIN / GUEST
+       ═══════════════════════════════════════════ -->
+  <section id="login" class="screen login">
+    <div class="login__logo">🐼</div>
+    <h2 class="login__title">Lưu hành trình học<br>của bạn</h2>
+    <p class="login__subtitle">Đăng nhập để lưu tiến độ và đồng bộ giữa các thiết bị</p>
+
+    <div class="login__buttons">
+      <button class="btn btn-google" onclick="App.navigateTo('home')">
+        <svg width="20" height="20" viewBox="0 0 24 24" style="flex-shrink:0">
+          <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/>
+          <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+          <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+          <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+        </svg>
+        Đăng nhập bằng Google
+      </button>
+      <button class="btn btn-outline" onclick="App.navigateTo('home')">
+        ✉️ Đăng nhập bằng Email
+      </button>
+    </div>
+
+    <div class="login__guest" onclick="App.navigateTo('home')">
+      Tiếp tục với tư cách khách →
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════
+       SCREEN 5: HOME DASHBOARD
+       ═══════════════════════════════════════════ -->
+  <section id="home" class="screen home">
+    <!-- Header -->
+    <div class="home__header">
+      <div class="avatar">🐻</div>
+      <div class="home__greeting">
+        <div class="home__greeting-text" id="home-greeting">Xin chào, Hai!</div>
+        <div class="home__greeting-sub">Bé hãy tiếp tục khám phá nào!</div>
+      </div>
+      <div class="home__badges">
+        <div class="streak-badge">🥕 3 củ cà rốt</div>
+      </div>
+    </div>
+
+    <div class="home__content">
+      <!-- XP Badge -->
+      <div style="display: flex; justify-content: flex-end; margin-top: -8px;">
+        <div class="xp-badge">⭐ 240 Điểm</div>
+      </div>
+
+      <!-- Today's Lesson Card -->
+      <div class="lesson-card" onclick="App.navigateTo('lesson-detail')">
+        <div class="lesson-card__header">
+          <span class="lesson-card__label">🐾 Bài học hôm nay</span>
+          <span class="lesson-card__xp">+20 XP</span>
+        </div>
+        <div class="lesson-card__title">Hiragana nhóm あ</div>
+        <div class="lesson-card__progress-text">2/5 hoạt động đã hoàn thành</div>
+        <div class="progress-bar" style="margin-bottom: 16px;">
+          <div class="progress-bar__fill" id="home-lesson-progress" style="width: 40%"></div>
+        </div>
+        <button class="btn btn-primary btn-sm" onclick="event.stopPropagation(); App.navigateTo('lesson-detail')">Tiếp tục học →</button>
+      </div>
+
+      <!-- Level Bar -->
+      <div class="card">
+        <div class="xp-bar">
+          <div class="xp-bar__level">3</div>
+          <div class="xp-bar__info">
+            <div class="xp-bar__label">Level 3 — Nhà thám hiểm nhí</div>
+            <div class="progress-bar">
+              <div class="progress-bar__fill progress-bar__fill--gold" id="home-xp-bar" style="width: 80%"></div>
+            </div>
+            <div class="xp-bar__numbers">240 / 300 XP</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Daily Missions -->
+      <div>
+        <h3 class="home__section-title">📋 Nhiệm vụ hôm nay</h3>
+        <div class="home__missions">
+          <div class="mission-card">
+            <div class="mission-card__icon">📚</div>
+            <div class="mission-card__content">
+              <div class="mission-card__title">Học 1 bài mới</div>
+              <div class="mission-card__progress-row">
+                <div class="progress-bar progress-bar--sm" style="flex:1">
+                  <div class="progress-bar__fill" style="width: 0%"></div>
+                </div>
+                <span style="font-size: 11px; color: var(--text-muted); white-space: nowrap;">0/1</span>
+              </div>
+            </div>
+            <div class="mission-card__reward">+20 XP</div>
+          </div>
+          <div class="mission-card">
+            <div class="mission-card__icon">🧩</div>
+            <div class="mission-card__content">
+              <div class="mission-card__title">Làm 2 quiz</div>
+              <div class="mission-card__progress-row">
+                <div class="progress-bar progress-bar--sm" style="flex:1">
+                  <div class="progress-bar__fill" style="width: 50%"></div>
+                </div>
+                <span style="font-size: 11px; color: var(--text-muted); white-space: nowrap;">1/2</span>
+              </div>
+            </div>
+            <div class="mission-card__reward">+15 XP</div>
+          </div>
+          <div class="mission-card">
+            <div class="mission-card__icon">🃏</div>
+            <div class="mission-card__content">
+              <div class="mission-card__title">Ôn tập 10 từ</div>
+              <div class="mission-card__progress-row">
+                <div class="progress-bar progress-bar--sm" style="flex:1">
+                  <div class="progress-bar__fill" style="width: 50%"></div>
+                </div>
+                <span style="font-size: 11px; color: var(--text-muted); white-space: nowrap;">5/10</span>
+              </div>
+            </div>
+            <div class="mission-card__reward">+10 XP</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Actions -->
+      <div>
+        <h3 class="home__section-title">⚡ Hành động nhanh</h3>
+        <div class="home__quick-actions">
+          <div class="quick-action" onclick="App.navigateTo('flashcard-screen')">
+            <div class="quick-action__icon quick-action__icon--purple">🪄</div>
+            <span class="quick-action__label">Thẻ phép</span>
+          </div>
+          <div class="quick-action" onclick="App.navigateTo('quiz-screen')">
+            <div class="quick-action__icon quick-action__icon--gold">🧩</div>
+            <span class="quick-action__label">Quiz</span>
+          </div>
+          <div class="quick-action">
+            <div class="quick-action__icon quick-action__icon--green">🩹</div>
+            <span class="quick-action__label">Sửa lỗi sai</span>
+          </div>
+          <div class="quick-action">
+            <div class="quick-action__icon quick-action__icon--blue">🐰</div>
+            <span class="quick-action__label">Nghe</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Nav -->
+    <nav class="bottom-nav">
+      <div class="bottom-nav__item bottom-nav__item--active" data-screen="home">
+        <span class="bottom-nav__icon">🍄</span>
+        <span class="bottom-nav__label">Home</span>
+      </div>
+      <div class="bottom-nav__item" data-screen="learning-path">
+        <span class="bottom-nav__icon">🗺️</span>
+        <span class="bottom-nav__label">Lộ trình</span>
+      </div>
+      <div class="bottom-nav__item" data-screen="daily-mission">
+        <span class="bottom-nav__icon">📜</span>
+        <span class="bottom-nav__label">Nhiệm vụ</span>
+      </div>
+      <div class="bottom-nav__item" data-screen="profile">
+        <span class="bottom-nav__icon">🐻</span>
+        <span class="bottom-nav__label">Hồ sơ</span>
+      </div>
+    </nav>
+  </section>
+
+  <!-- ═══════════════════════════════════════════
+       SCREEN 6: LEARNING PATH
+       ═══════════════════════════════════════════ -->
+  <section id="learning-path" class="screen learning-path">
+    <div class="learning-path__header">
+      <h2 class="learning-path__title">🗺️ Lộ trình N5 của bạn</h2>
+      <p class="learning-path__progress-text">Bạn đã hoàn thành 12% lộ trình N5</p>
+      <div class="learning-path__progress-bar">
+        <div class="learning-path__progress-fill"></div>
+      </div>
+    </div>
+
+    <div class="learning-path__content">
+      <!-- Chapter 1: Khởi động -->
+      <div class="learning-path__chapter">
+        <div class="chapter-header">
+          <div class="chapter-header__icon">🚀</div>
+          <span class="chapter-header__title">Chapter 1: Khởi động</span>
+          <span class="chapter-header__status tag tag--purple">Đang học</span>
+        </div>
+
+        <div style="padding-left: 4px;">
+          <!-- Lesson 1: Completed -->
+          <div class="path-node path-node--completed">
+            <div class="path-node__line"></div>
+            <div class="path-node__dot">🌟</div>
+            <div class="path-node__content">
+              <div class="path-node__title">Giới thiệu tiếng Nhật</div>
+              <div class="path-node__subtitle">Hoàn thành</div>
+              <div class="path-node__xp">+15 XP ✅</div>
+            </div>
+          </div>
+
+          <!-- Lesson 2: Current -->
+          <div class="path-node path-node--current" onclick="App.navigateTo('lesson-detail')">
+            <div class="path-node__line"></div>
+            <div class="path-node__dot">🐾</div>
+            <div class="path-node__content">
+              <div class="path-node__title">Hiragana nhóm あ</div>
+              <div class="path-node__subtitle">Đang học — 2/5 hoàn thành</div>
+              <div class="path-node__xp">+20 XP</div>
+            </div>
+          </div>
+
+          <!-- Lesson 3: Locked -->
+          <div class="path-node path-node--locked">
+            <div class="path-node__line"></div>
+            <div class="path-node__dot">🔒</div>
+            <div class="path-node__content">
+              <div class="path-node__title">Hiragana nhóm か</div>
+              <div class="path-node__subtitle">Chưa mở khóa</div>
+              <div class="path-node__xp">+20 XP</div>
+              <button class="path-node__unlock" onclick="AdManager.showAdOffer('unlock_lesson')">🎬 Xem ad để mở khóa</button>
+            </div>
+          </div>
+
+          <!-- Boss Quiz -->
+          <div class="path-node path-node--boss path-node--locked">
+            <div class="path-node__line"></div>
+            <div class="path-node__dot">🐲</div>
+            <div class="path-node__content">
+              <div class="path-node__title">⚔️ Kiểm tra Hiragana cơ bản</div>
+              <div class="path-node__subtitle">Boss Quiz — Chưa mở khóa</div>
+              <div class="path-node__xp">+50 XP</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Chapter 2: Katakana — Locked -->
+      <div class="learning-path__chapter">
+        <div class="chapter-header chapter-header--locked">
+          <div class="chapter-header__icon">🎌</div>
+          <span class="chapter-header__title">Chapter 2: Katakana</span>
+          <span class="chapter-header__status">🔒</span>
+        </div>
+        <div style="padding-left: 4px; opacity: 0.5;">
+          <div class="path-node path-node--locked">
+            <div class="path-node__line"></div>
+            <div class="path-node__dot">🔒</div>
+            <div class="path-node__content">
+              <div class="path-node__title">Katakana nhóm ア</div>
+              <div class="path-node__subtitle">Chưa mở khóa</div>
+            </div>
+          </div>
+          <div class="path-node path-node--locked">
+            <div class="path-node__line"></div>
+            <div class="path-node__dot">🔒</div>
+            <div class="path-node__content">
+              <div class="path-node__title">Katakana nhóm カ</div>
+              <div class="path-node__subtitle">Chưa mở khóa</div>
+            </div>
+          </div>
+          <div class="path-node path-node--boss path-node--locked">
+            <div class="path-node__dot">🐲</div>
+            <div class="path-node__content">
+              <div class="path-node__title">⚔️ Kiểm tra Katakana</div>
+              <div class="path-node__subtitle">Boss Quiz</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Chapter 3: Từ vựng N5 — Locked -->
+      <div class="learning-path__chapter">
+        <div class="chapter-header chapter-header--locked">
+          <div class="chapter-header__icon">📖</div>
+          <span class="chapter-header__title">Chapter 3: Từ vựng N5</span>
+          <span class="chapter-header__status">🔒</span>
+        </div>
+        <div style="padding-left: 4px; opacity: 0.5;">
+          <div class="path-node path-node--locked">
+            <div class="path-node__line"></div>
+            <div class="path-node__dot">🔒</div>
+            <div class="path-node__content">
+              <div class="path-node__title">Chào hỏi cơ bản</div>
+              <div class="path-node__subtitle">Chưa mở khóa</div>
+            </div>
+          </div>
+          <div class="path-node path-node--locked">
+            <div class="path-node__dot">🔒</div>
+            <div class="path-node__content">
+              <div class="path-node__title">Số đếm 1-10</div>
+              <div class="path-node__subtitle">Chưa mở khóa</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Chapter 4: Ngữ pháp N5 — Locked -->
+      <div class="learning-path__chapter" style="padding-bottom: 80px;">
+        <div class="chapter-header chapter-header--locked">
+          <div class="chapter-header__icon">📝</div>
+          <span class="chapter-header__title">Chapter 4: Ngữ pháp N5</span>
+          <span class="chapter-header__status">🔒</span>
+        </div>
+        <div style="padding-left: 4px; opacity: 0.5;">
+          <div class="path-node path-node--locked">
+            <div class="path-node__line"></div>
+            <div class="path-node__dot">🔒</div>
+            <div class="path-node__content">
+              <div class="path-node__title">Cấu trúc は...です</div>
+              <div class="path-node__subtitle">Chưa mở khóa</div>
+            </div>
+          </div>
+          <div class="path-node path-node--locked">
+            <div class="path-node__dot">🔒</div>
+            <div class="path-node__content">
+              <div class="path-node__title">Trợ từ cơ bản</div>
+              <div class="path-node__subtitle">Chưa mở khóa</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Nav -->
+    <nav class="bottom-nav">
+      <div class="bottom-nav__item" data-screen="home">
+        <span class="bottom-nav__icon">🍄</span>
+        <span class="bottom-nav__label">Home</span>
+      </div>
+      <div class="bottom-nav__item bottom-nav__item--active" data-screen="learning-path">
+        <span class="bottom-nav__icon">🗺️</span>
+        <span class="bottom-nav__label">Lộ trình</span>
+      </div>
+      <div class="bottom-nav__item" data-screen="daily-mission">
+        <span class="bottom-nav__icon">📋</span>
+        <span class="bottom-nav__label">Nhiệm vụ</span>
+      </div>
+      <div class="bottom-nav__item" data-screen="profile">
+        <span class="bottom-nav__icon">🐻</span>
+        <span class="bottom-nav__label">Hồ sơ</span>
+      </div>
+    </nav>
+  </section>
+
+  <!-- ═══════════════════════════════════════════
+       SCREEN 7: LESSON DETAIL
+       ═══════════════════════════════════════════ -->
+  <section id="lesson-detail" class="screen lesson-detail">
+    <div class="screen-header">
+      <button class="screen-header__back" onclick="App.goBack()">←</button>
+      <span class="screen-header__title">Hiragana nhóm あ</span>
+      <span class="lesson-card__xp">+20 XP</span>
+    </div>
+
+    <!-- Lesson Meta -->
+    <div class="lesson-detail__meta">
+      <div class="lesson-detail__meta-item">
+        <span class="lesson-detail__meta-icon">⏱️</span>
+        <span>5 phút</span>
+      </div>
+      <div class="lesson-detail__meta-item">
+        <span class="lesson-detail__meta-icon">📝</span>
+        <span>5 ký tự</span>
+      </div>
+      <div class="lesson-detail__meta-item">
+        <span class="lesson-detail__meta-icon">📊</span>
+        <span>2/5 xong</span>
+      </div>
+    </div>
+
+    <!-- Lesson Flow -->
+    <div class="lesson-flow">
+      <span class="lesson-flow__step lesson-flow__step--done">📖 Học</span>
+      <span class="lesson-flow__arrow">→</span>
+      <span class="lesson-flow__step lesson-flow__step--active">🪄 Thẻ bài</span>
+      <span class="lesson-flow__arrow">→</span>
+      <span class="lesson-flow__step">🧩 Trò chơi</span>
+    </div>
+
+    <!-- Character List -->
+    <div class="lesson-detail__section-title">Nội dung bài học</div>
+    <div class="lesson-detail__chars">
+      <div class="char-card">
+        <div class="char-card__hiragana">あ</div>
+        <div class="char-card__info">
+          <div class="char-card__romaji">a</div>
+          <div class="char-card__example">あめ</div>
+          <div class="char-card__meaning">mưa</div>
+        </div>
+        <div class="char-card__audio" onclick="playAudio('あ、あめ', this)">🔊</div>
+      </div>
+      <div class="char-card">
+        <div class="char-card__hiragana">い</div>
+        <div class="char-card__info">
+          <div class="char-card__romaji">i</div>
+          <div class="char-card__example">いぬ</div>
+          <div class="char-card__meaning">chó</div>
+        </div>
+        <div class="char-card__audio" onclick="playAudio('い、いぬ', this)">🔊</div>
+      </div>
+      <div class="char-card">
+        <div class="char-card__hiragana">う</div>
+        <div class="char-card__info">
+          <div class="char-card__romaji">u</div>
+          <div class="char-card__example">うみ</div>
+          <div class="char-card__meaning">biển</div>
+        </div>
+        <div class="char-card__audio" onclick="playAudio('う、うみ', this)">🔊</div>
+      </div>
+      <div class="char-card">
+        <div class="char-card__hiragana">え</div>
+        <div class="char-card__info">
+          <div class="char-card__romaji">e</div>
+          <div class="char-card__example">えき</div>
+          <div class="char-card__meaning">nhà ga</div>
+        </div>
+        <div class="char-card__audio" onclick="playAudio('え、えき', this)">🔊</div>
+      </div>
+      <div class="char-card">
+        <div class="char-card__hiragana">お</div>
+        <div class="char-card__info">
+          <div class="char-card__romaji">o</div>
+          <div class="char-card__example">おかね</div>
+          <div class="char-card__meaning">tiền</div>
+        </div>
+        <div class="char-card__audio" onclick="playAudio('お、おかね', this)">🔊</div>
+      </div>
+    </div>
+
+    <!-- Footer CTA -->
+    <div class="lesson-detail__footer">
+      <button class="btn btn-primary" onclick="App.navigateTo('flashcard-screen')">🪄 Bắt đầu thẻ bài</button>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════
+       SCREEN 8: FLASHCARD
+       ═══════════════════════════════════════════ -->
+  <section id="flashcard-screen" class="screen flashcard-screen">
+    <div class="screen-header">
+      <button class="screen-header__back" onclick="App.goBack()">←</button>
+      <span class="screen-header__title">Hiragana nhóm あ</span>
+      <span class="tag tag--purple" id="fc-progress">1/5</span>
+    </div>
+
+    <div class="flashcard-screen__content">
+      <div class="flashcard-container">
+        <div class="flashcard" id="flashcard">
+          <!-- Front -->
+          <div class="flashcard__face flashcard__front">
+            <div class="flashcard__character" id="fc-char-front">あ</div>
+            <div class="flashcard__audio-btn" onclick="event.stopPropagation(); playAudio(document.getElementById('fc-char-front').textContent, this)">🔊</div>
+          </div>
+          <!-- Back -->
+          <div class="flashcard__face flashcard__back">
+            <div class="flashcard__character" id="fc-char-back">あ</div>
+            <div class="flashcard__romaji" id="fc-romaji">a</div>
+            <div class="flashcard__example" id="fc-example">あめ</div>
+            <div class="flashcard__meaning" id="fc-meaning">mưa</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flashcard-screen__progress" id="fc-remembered">0/5 thẻ đã nhớ</div>
+    </div>
+
+    <div class="flashcard-screen__footer">
+      <button class="btn btn-primary" id="fc-flip-btn" onclick="Screens.flipFlashcard()">🔄 Lật thẻ</button>
+
+      <div class="recall-buttons" id="fc-recall-btns" style="display: none;">
+        <button class="recall-btn recall-btn--forgot" onclick="Screens.recallFlashcard('forgot')">😕 Chưa nhớ</button>
+        <button class="recall-btn recall-btn--almost" onclick="Screens.recallFlashcard('almost')">🤔 Gần nhớ</button>
+        <button class="recall-btn recall-btn--remembered" onclick="Screens.recallFlashcard('remembered')">😊 Đã nhớ</button>
+      </div>
+
+      <button class="btn btn-primary" id="fc-quiz-btn" style="display: none;" onclick="App.navigateTo('quiz-screen')">🧩 Làm quiz</button>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════
+       SCREEN 9: QUIZ
+       ═══════════════════════════════════════════ -->
+  <section id="quiz-screen" class="screen quiz-screen">
+    <div class="screen-header">
+      <button class="screen-header__back" onclick="App.goBack()">←</button>
+      <span class="screen-header__title">Quiz</span>
+    </div>
+
+    <div class="quiz-screen__header">
+      <div class="quiz-screen__counter" id="quiz-counter">Câu 1/10</div>
+      <div class="progress-bar">
+        <div class="progress-bar__fill" id="quiz-progress-fill" style="width: 0%"></div>
+      </div>
+    </div>
+
+    <div class="quiz-screen__content">
+      <div class="quiz-screen__question" id="quiz-question">Chữ 'あ' đọc là gì?</div>
+
+      <div class="quiz-screen__options" id="quiz-options">
+        <!-- Rendered by JS -->
+      </div>
+
+      <div class="quiz-feedback" id="quiz-feedback" style="display: none;"></div>
+    </div>
+
+    <div class="quiz-screen__footer">
+      <button class="btn btn-primary" id="quiz-continue" style="display: none;" onclick="Screens.nextQuizQuestion()">Tiếp tục</button>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════
+       SCREEN 10: QUIZ RESULT
+       ═══════════════════════════════════════════ -->
+  <section id="quiz-result" class="screen quiz-result">
+    <div class="quiz-result__hero">
+      <div class="quiz-result__mascot">🐶🎉</div>
+      <h2 class="quiz-result__title">Hoàn thành bài học!</h2>
+    </div>
+
+    <div class="quiz-result__score-section">
+      <div class="circular-progress">
+        <svg viewBox="0 0 120 120">
+          <circle class="circular-progress__bg" cx="60" cy="60" r="54"/>
+          <circle class="circular-progress__fill" id="result-circle" cx="60" cy="60" r="54"/>
+        </svg>
+        <div class="circular-progress__text">
+          <div class="circular-progress__value" id="result-score">8/10</div>
+          <div class="circular-progress__label">Điểm</div>
+        </div>
+      </div>
+
+      <div class="quiz-result__xp">
+        <div class="quiz-result__xp-value" id="result-xp">+35 XP</div>
+        <div class="quiz-result__xp-label">XP nhận được</div>
+      </div>
+    </div>
+
+    <!-- Level Progress -->
+    <div class="quiz-result__level">
+      <div class="xp-bar">
+        <div class="xp-bar__level">3</div>
+        <div class="xp-bar__info">
+          <div class="xp-bar__label">Level 3</div>
+          <div class="progress-bar progress-bar--lg">
+            <div class="progress-bar__fill progress-bar__fill--gold" id="result-progress-fill" style="width: 91%"></div>
+          </div>
+          <div class="xp-bar__numbers" id="result-xp-text">275 / 300 XP</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Badge Earned -->
+    <div class="quiz-result__badge">
+      <div class="quiz-result__badge-icon">🎯</div>
+      <div class="quiz-result__badge-text">
+        <div class="quiz-result__badge-title">Badge mới!</div>
+        <div class="quiz-result__badge-name">Hiragana Starter</div>
+      </div>
+      <div>🏆</div>
+    </div>
+
+    <!-- Actions -->
+    <div class="quiz-result__actions">
+      <button class="btn btn-rewarded" onclick="AdManager.showAdOffer('double_xp')">🎬 Xem video — Nhân đôi XP!</button>
+      <button class="btn btn-primary" onclick="App.navigateTo('home')">📖 Học bài tiếp theo</button>
+      <button class="btn btn-secondary" onclick="App.navigateTo('quiz-screen')">📝 Ôn câu sai</button>
+      <button class="btn btn-ghost" onclick="App.navigateTo('home')">← Về trang chủ</button>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════
+       SCREEN 11: DAILY MISSION
+       ═══════════════════════════════════════════ -->
+  <section id="daily-mission" class="screen daily-mission">
+    <div class="daily-mission__header">
+      <h2 class="daily-mission__title">📋 Nhiệm vụ hôm nay</h2>
+      <p class="daily-mission__subtitle">Hoàn thành nhiệm vụ để nhận XP bonus</p>
+    </div>
+
+    <!-- Summary -->
+    <div class="daily-mission__summary">
+      <div class="daily-mission__summary-value">1/4</div>
+      <div class="daily-mission__summary-label">nhiệm vụ hoàn thành</div>
+    </div>
+
+    <div class="daily-mission__list">
+      <!-- Mission 1: Not Started -->
+      <div class="mission-card">
+        <div class="mission-card__icon">📚</div>
+        <div class="mission-card__content">
+          <div class="mission-card__title">Hoàn thành 1 bài học</div>
+          <div class="mission-card__progress-row">
+            <div class="progress-bar progress-bar--sm" style="flex:1">
+              <div class="progress-bar__fill" style="width: 0%"></div>
+            </div>
+            <span style="font-size: 11px; color: var(--text-muted);">0/1</span>
+          </div>
+        </div>
+        <div class="mission-card__reward">+20 XP</div>
+      </div>
+
+      <!-- Mission 2: In Progress -->
+      <div class="mission-card">
+        <div class="mission-card__icon">🧩</div>
+        <div class="mission-card__content">
+          <div class="mission-card__title">Làm 2 quiz</div>
+          <div class="mission-card__progress-row">
+            <div class="progress-bar progress-bar--sm" style="flex:1">
+              <div class="progress-bar__fill" style="width: 50%"></div>
+            </div>
+            <span style="font-size: 11px; color: var(--text-muted);">1/2</span>
+          </div>
+        </div>
+        <div class="mission-card__reward">+15 XP</div>
+      </div>
+
+      <!-- Mission 3: In Progress -->
+      <div class="mission-card">
+        <div class="mission-card__icon">🃏</div>
+        <div class="mission-card__content">
+          <div class="mission-card__title">Ôn tập 10 flashcard</div>
+          <div class="mission-card__progress-row">
+            <div class="progress-bar progress-bar--sm" style="flex:1">
+              <div class="progress-bar__fill" style="width: 50%"></div>
+            </div>
+            <span style="font-size: 11px; color: var(--text-muted);">5/10</span>
+          </div>
+        </div>
+        <div class="mission-card__reward">+10 XP</div>
+      </div>
+
+      <!-- Mission 4: Completed -->
+      <div class="mission-card mission-card--completed">
+        <div class="mission-card__icon">✅</div>
+        <div class="mission-card__content">
+          <div class="mission-card__title">Học liên tục hôm nay</div>
+          <div class="mission-card__progress-row">
+            <div class="progress-bar progress-bar--sm" style="flex:1">
+              <div class="progress-bar__fill progress-bar__fill--success" style="width: 100%"></div>
+            </div>
+            <span style="font-size: 11px; color: var(--success);">✓</span>
+          </div>
+        </div>
+        <div class="mission-card__reward" style="color: var(--success);">🔥 Streak</div>
+      </div>
+    </div>
+
+    <!-- Bottom Nav -->
+    <nav class="bottom-nav">
+      <div class="bottom-nav__item" data-screen="home">
+        <span class="bottom-nav__icon">🍄</span>
+        <span class="bottom-nav__label">Home</span>
+      </div>
+      <div class="bottom-nav__item" data-screen="learning-path">
+        <span class="bottom-nav__icon">🗺️</span>
+        <span class="bottom-nav__label">Lộ trình</span>
+      </div>
+      <div class="bottom-nav__item bottom-nav__item--active" data-screen="daily-mission">
+        <span class="bottom-nav__icon">📜</span>
+        <span class="bottom-nav__label">Nhiệm vụ</span>
+      </div>
+      <div class="bottom-nav__item" data-screen="profile">
+        <span class="bottom-nav__icon">🐻</span>
+        <span class="bottom-nav__label">Hồ sơ</span>
+      </div>
+    </nav>
+  </section>
+
+  <!-- ═══════════════════════════════════════════
+       SCREEN 12: PROFILE
+       ═══════════════════════════════════════════ -->
+  <section id="profile" class="screen profile">
+    <div class="profile__header">
+      <div class="profile__avatar">🐻</div>
+      <h2 class="profile__name">Hai</h2>
+      <div class="profile__level">Level 4 — Hiragana Explorer</div>
+      <div class="profile__xp">⭐ 520 XP</div>
+    </div>
+
+    <div class="profile__content">
+      <!-- Stats Grid -->
+      <div class="profile__stats">
+        <div class="stat-card">
+          <div class="stat-card__value">🔥 7</div>
+          <div class="stat-card__label">Streak</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card__value">18</div>
+          <div class="stat-card__label">Bài đã học</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card__value">32</div>
+          <div class="stat-card__label">Quiz đã làm</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card__value">120</div>
+          <div class="stat-card__label">Từ đã nhớ</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card__value">84%</div>
+          <div class="stat-card__label">Độ chính xác</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card__value">10h</div>
+          <div class="stat-card__label">Thời gian học</div>
+        </div>
+      </div>
+
+      <!-- Recent Badges -->
+      <h3 class="profile__section-title">🏆 Huy hiệu gần đây</h3>
+      <div class="profile__badges-preview">
+        <div class="badge-item badge-item--unlocked">
+          <div class="badge-item__icon">🌟</div>
+          <div class="badge-item__name">Người mới</div>
+        </div>
+        <div class="badge-item badge-item--unlocked">
+          <div class="badge-item__icon">🎯</div>
+          <div class="badge-item__name">Hiragana Starter</div>
+        </div>
+        <div class="badge-item badge-item--unlocked">
+          <div class="badge-item__icon">🔥</div>
+          <div class="badge-item__name">Streak 7</div>
+        </div>
+      </div>
+      <div class="profile__badges-link" onclick="App.navigateTo('badges-screen')">Xem tất cả huy hiệu →</div>
+
+      <!-- Learning Goal -->
+      <div class="profile__goal-card">
+        <div class="profile__goal-title">🎯 Mục tiêu: JLPT N5</div>
+        <div class="profile__goal-progress">Tiến độ: 12%</div>
+        <div class="progress-bar">
+          <div class="progress-bar__fill" style="width: 12%"></div>
+        </div>
+      </div>
+
+      <!-- Settings Button -->
+      <div class="profile__settings-btn" onclick="App.navigateTo('settings-screen')">
+        ⚙️ Cài đặt
+      </div>
+    </div>
+
+    <!-- Bottom Nav -->
+    <nav class="bottom-nav">
+      <div class="bottom-nav__item" data-screen="home">
+        <span class="bottom-nav__icon">🏠</span>
+        <span class="bottom-nav__label">Home</span>
+      </div>
+      <div class="bottom-nav__item" data-screen="learning-path">
+        <span class="bottom-nav__icon">🗺️</span>
+        <span class="bottom-nav__label">Lộ trình</span>
+      </div>
+      <div class="bottom-nav__item" data-screen="daily-mission">
+        <span class="bottom-nav__icon">📋</span>
+        <span class="bottom-nav__label">Nhiệm vụ</span>
+      </div>
+      <div class="bottom-nav__item bottom-nav__item--active" data-screen="profile">
+        <span class="bottom-nav__icon">👤</span>
+        <span class="bottom-nav__label">Hồ sơ</span>
+      </div>
+    </nav>
+  </section>
+
+  <!-- ═══════════════════════════════════════════
+       SCREEN 13: BADGES / ACHIEVEMENTS
+       ═══════════════════════════════════════════ -->
+  <section id="badges-screen" class="screen badges-screen">
+    <div class="screen-header">
+      <button class="screen-header__back" onclick="App.goBack()">←</button>
+      <span class="screen-header__title">Huy hiệu</span>
+    </div>
+
+    <div class="badges-screen__count">3/9 huy hiệu đã mở khóa</div>
+
+    <div class="badges-screen__grid">
+      <div class="badge-item badge-item--unlocked">
+        <div class="badge-item__icon">🌟</div>
+        <div class="badge-item__name">Người mới bắt đầu</div>
+        <div class="badge-item__condition">Hoàn thành bài đầu tiên</div>
+      </div>
+      <div class="badge-item badge-item--unlocked">
+        <div class="badge-item__icon">🎯</div>
+        <div class="badge-item__name">Hiragana Starter</div>
+        <div class="badge-item__condition">Hoàn thành nhóm あ</div>
+      </div>
+      <div class="badge-item badge-item--unlocked">
+        <div class="badge-item__icon">🔥</div>
+        <div class="badge-item__name">Streak 7</div>
+        <div class="badge-item__condition">Học 7 ngày liên tiếp</div>
+      </div>
+      <div class="badge-item badge-item--locked">
+        <div class="badge-item__icon">🔤</div>
+        <div class="badge-item__name">Kana Explorer</div>
+        <div class="badge-item__condition">Hoàn thành Hiragana</div>
+      </div>
+      <div class="badge-item badge-item--locked">
+        <div class="badge-item__icon">💯</div>
+        <div class="badge-item__name">Quiz Master</div>
+        <div class="badge-item__condition">Đạt 100% trong quiz</div>
+      </div>
+      <div class="badge-item badge-item--locked">
+        <div class="badge-item__icon">📚</div>
+        <div class="badge-item__name">N5 Beginner</div>
+        <div class="badge-item__condition">Hoàn thành 10 bài N5</div>
+      </div>
+      <div class="badge-item badge-item--locked">
+        <div class="badge-item__icon">⚡</div>
+        <div class="badge-item__name">Speed Learner</div>
+        <div class="badge-item__condition">Quiz dưới 1 phút</div>
+      </div>
+      <div class="badge-item badge-item--locked">
+        <div class="badge-item__icon">🏅</div>
+        <div class="badge-item__name">Consistent</div>
+        <div class="badge-item__condition">Học 30 ngày liên tiếp</div>
+      </div>
+      <div class="badge-item badge-item--locked">
+        <div class="badge-item__icon">🎓</div>
+        <div class="badge-item__name">N5 Master</div>
+        <div class="badge-item__condition">Hoàn thành toàn bộ N5</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════
+       SCREEN 14: SETTINGS
+       ═══════════════════════════════════════════ -->
+  <section id="settings-screen" class="screen settings-screen">
+    <div class="screen-header">
+      <button class="screen-header__back" onclick="App.goBack()">←</button>
+      <span class="screen-header__title">Cài đặt</span>
+    </div>
+
+    <div class="settings-screen__list">
+      <div class="settings-item">
+        <span class="settings-item__icon">👤</span>
+        <span class="settings-item__title">Tài khoản</span>
+        <span class="settings-item__chevron">›</span>
+      </div>
+      <div class="settings-screen__divider"></div>
+      <div class="settings-item">
+        <span class="settings-item__icon">🎯</span>
+        <span class="settings-item__title">Mục tiêu học</span>
+        <span class="settings-item__chevron">›</span>
+      </div>
+      <div class="settings-screen__divider"></div>
+      <div class="settings-item">
+        <span class="settings-item__icon">⏰</span>
+        <span class="settings-item__title">Thời gian học mỗi ngày</span>
+        <span class="settings-item__chevron">›</span>
+      </div>
+      <div class="settings-screen__divider"></div>
+      <div class="settings-item">
+        <span class="settings-item__icon">🔔</span>
+        <span class="settings-item__title">Nhắc học</span>
+        <div class="toggle active" onclick="this.classList.toggle('active')"></div>
+      </div>
+      <div class="settings-screen__divider"></div>
+      <div class="settings-item">
+        <span class="settings-item__icon">🔊</span>
+        <span class="settings-item__title">Âm thanh</span>
+        <div class="toggle active" onclick="this.classList.toggle('active')"></div>
+      </div>
+      <div class="settings-screen__divider"></div>
+      <div class="settings-item">
+        <span class="settings-item__icon">🌐</span>
+        <span class="settings-item__title">Ngôn ngữ giao diện</span>
+        <span class="settings-item__chevron">›</span>
+      </div>
+      <div class="settings-screen__divider"></div>
+      <div class="settings-item">
+        <span class="settings-item__icon">📄</span>
+        <span class="settings-item__title">Điều khoản</span>
+        <span class="settings-item__chevron">›</span>
+      </div>
+    </div>
+
+    <div class="settings-screen__list" style="margin-top: 12px;">
+      <div class="settings-item settings-item--danger">
+        <span class="settings-item__icon">🚪</span>
+        <span class="settings-item__title">Đăng xuất</span>
+      </div>
+    </div>
+
+    <div class="settings-screen__version">Nihongo Quest v1.0.0</div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════
+       AD SYSTEM: Global Overlays
+       ═══════════════════════════════════════════ -->
+
+  <!-- Ad Offer Modal -->
+  <div class="ad-overlay" id="ad-overlay">
+    <div class="ad-modal">
+      <div class="ad-modal__header">
+        <div class="ad-modal__icon" id="ad-modal-icon">⭐</div>
+        <div class="ad-modal__title" id="ad-modal-title">Nhân đôi XP!</div>
+        <div class="ad-modal__desc" id="ad-modal-desc">Xem một video ngắn để nhân đôi điểm XP.</div>
+      </div>
+      <div class="ad-modal__reward" id="ad-modal-reward">🎁 Phần thưởng: x2 XP</div>
+      <div class="ad-modal__actions">
+        <button class="btn btn-rewarded" id="ad-modal-watch">🎬 Xem video (5 giây)</button>
+        <button class="btn btn-ghost" onclick="AdManager.closeAdOffer()">Không, cảm ơn</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Ad Playing Screen (Fullscreen simulation) -->
+  <div class="ad-playing" id="ad-playing">
+    <div class="ad-playing__label">Quảng cáo</div>
+    <div class="ad-playing__content">
+      <div class="ad-playing__emoji">🎌</div>
+      <div class="ad-playing__brand">SakuraTravel</div>
+      <div class="ad-playing__tagline">Du lịch Nhật Bản giá tốt nhất!</div>
+    </div>
+    <div class="ad-playing__progress">
+      <div class="progress-bar">
+        <div class="progress-bar__fill progress-bar__fill--gold" id="ad-progress-fill" style="width: 0%"></div>
+      </div>
+    </div>
+    <div class="ad-playing__timer" id="ad-timer">Quảng cáo kết thúc sau 5 giây...</div>
+    <button class="ad-playing__close" id="ad-close">✕ Đóng & nhận thưởng</button>
+  </div>
+
+  <!-- Ad Reward Celebration -->
+  <div class="ad-reward" id="ad-reward">
+    <div class="ad-reward__card">
+      <div class="ad-reward__emoji" id="ad-reward-emoji">🌟</div>
+      <div class="ad-reward__title" id="ad-reward-title">XP đã được nhân đôi!</div>
+      <div class="ad-reward__value" id="ad-reward-value">+70 XP</div>
+      <button class="btn btn-primary ad-reward__btn" onclick="AdManager.closeReward()">Tuyệt vời! 🎉</button>
+    </div>
+  </div>
+
+</div>
+
+<!-- JavaScript -->
+<script src="js/data.js"></script>
+<script src="js/screens.js"></script>
+<script src="js/app.js"></script>
+
+</body>
+</html>
