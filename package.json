@@ -2,12 +2,13 @@
   "name": "nihongo-quest",
   "version": "1.0.0",
   "description": "Nihongo Quest Application",
-  "main": "server.js",
   "type": "module",
   "scripts": {
-    "start": "node server.js"
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
   },
-  "dependencies": {
-    "express": "^4.18.2"
+  "devDependencies": {
+    "vite": "^5.0.0"
   }
 }
