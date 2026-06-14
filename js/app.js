@@ -1,6 +1,7 @@
 /* ============================================
    NIHONGO QUEST — App Controller
    ============================================ */
+import { getLessonItems } from './supabaseServices.js';
 
 // ── Audio: Text-to-Speech phát âm tiếng Nhật ──
 function playAudio(text, btn) {
@@ -43,8 +44,16 @@ const App = {
   bottomNavScreens: ['home', 'learning-path', 'daily-mission', 'profile'],
 
   // ── Initialize App ──
-  init() {
+  async init() {
     this.showScreen('splash');
+
+    // 🚀 Test lấy dữ liệu từ Supabase khi App vừa khởi động
+    try {
+      const dataTuSupabase = await getLessonItems();
+      console.log('✅ Dữ liệu từ Supabase đã tải thành công:', dataTuSupabase);
+    } catch (err) {
+      console.error('❌ Lỗi kết nối Supabase:', err);
+    }
 
     // Auto-transition from splash after 2.5s
     setTimeout(() => {

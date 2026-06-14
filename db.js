@@ -1,11 +1,13 @@
-const { createClient } = require('@supabase/supabase-js');
+import { createClient } from '@supabase/supabase-js';
 
-const supabase = createClient(
-    process.env.SUPABASE_URL,
-    process.env.SUPABASE_ANON_KEY
-);
+// Trong Vite, biến môi trường (environment variables) phải bắt đầu bằng VITE_
+// và được truy cập thông qua import.meta.env thay vì process.env
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
-// Test the connection
+const supabase = createClient(supabaseUrl, supabaseAnonKey);
+
+// Test kết nối
 supabase
     .from('users')
     .select('*')
@@ -15,4 +17,4 @@ supabase
         else console.log('Connected:', data);
     });
 
-module.exports = supabase;
+export default supabase;
